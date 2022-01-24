@@ -748,7 +748,6 @@ ddca_get_display_info(
 }
 
 
-
 DDCA_Status
 ddca_get_display_refs(
       bool                include_invalid_displays,
@@ -758,7 +757,6 @@ ddca_get_display_refs(
    DBGTRC_STARTING(debug, DDCA_TRC_API|DDCA_TRC_DDC,
                  "include_invalid_displays=%s", SBOOL(include_invalid_displays));
    free_thread_error_detail();
-   // assert(dlist_loc);
    API_PRECOND(drefs_loc);
 
    ddc_ensure_displays_detected();
@@ -766,22 +764,21 @@ ddca_get_display_refs(
 
    DDCA_Display_Ref * result_list = calloc(filtered_displays->len + 1,sizeof(DDCA_Display_Ref));
    DDCA_Display_Ref * cur_ddca_dref = result_list;
-
    for (int ndx = 0; ndx < filtered_displays->len; ndx++) {
          Display_Ref * dref = g_ptr_array_index(filtered_displays, ndx);
          *cur_ddca_dref = (DDCA_Display_Ref*) dref;
          cur_ddca_dref++;
    }
-   *cur_ddca_dref = NULL; // redundant since calloc()
+   *cur_ddca_dref = NULL; // terminating NULL ptr, redundant since calloc()
    g_ptr_array_free(filtered_displays, true);
 
    int dref_ct = 0;
    if (debug || IS_TRACING_GROUP( DDCA_TRC_API|DDCA_TRC_DDC )) {
-      DBGMSG("Done.     Returning 0. *drefs_loc=%p", result_list);
+      DBGMSG("          *drefs_loc=%p");
       DDCA_Display_Ref * cur_ddca_dref = result_list;
-      while (cur_ddca_dref) {
-         Display_Ref * dref = (Display_Ref*) cur_ddca_dref;
-         rpt_vstring(1, "DDCA_Display_Ref %p -> display %d", cur_ddca_dref, dref->dispno);
+      while (*cur_ddca_dref) {
+         Display_Ref * dref = (Display_Ref*) *cur_ddca_dref;
+         DBGMSG("          DDCA_Display_Ref %p -> display %d", *cur_ddca_dref, dref->dispno);
          cur_ddca_dref++;
          dref_ct++;
       }
