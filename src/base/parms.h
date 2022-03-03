@@ -98,11 +98,11 @@
 //
 
 /** Maximum numbers of values on setvcp command */
-#define MAX_SETVCP_VALUES    50
+#define MAX_SETVCP_VALUES    256
 
 /** Maximum command arguments */
 // #define MAX_ARGS (MAX_SETVCP_VALUES*2)   // causes CMDID_* undefined
-#define MAX_ARGS 100        // hack
+#define MAX_ARGS 520        // hack
 
 /** Parallelize display checks during initialization if at least this number of displays */
 // on banner with 4 displays, async  detect: 1.7 sec, non-async 3.4 sec
